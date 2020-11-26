@@ -1,0 +1,98 @@
+<?php
+declare(strict_types=1);
+
+namespace %NAMESPACE%;
+
+use App\Controller\BaseController;
+use App\Model\%MODEL%;
+use App\Request\%MODEL%Request;
+use Hyperf\Apidog\Annotation\ApiController;
+use Hyperf\Apidog\Annotation\PostApi;
+use Hyperf\Apidog\Annotation\ApiResponse;
+use Hyperf\Di\Annotation\Inject;
+use Hyperf\Apidog\Annotation\GetApi;
+use Hyperf\EricTool\Annotation\ValidationRequest;
+use Hyperf\EricTool\Annotation\BodyValidation;
+use Hyperf\EricTool\Annotation\SwaggerResponse;
+
+/**
+ * @ApiController(tag="%TITLE%管理",prefix="/%PREFIX%")
+ */
+class %CLASS% extends BaseController
+{
+    /**
+     * @Inject()
+     *
+     * @var \App\Model\%MODEL%
+     */
+    public $model;
+
+    /**
+     * %TITLE%列表
+     * @PostApi(summary="%TITLE%列表",path="index")
+     * @ValidationRequest(template="authorization")
+     * @BodyValidation(validate="%MODEL%Request",scene="search",template="page_search")
+     * @ApiResponse(code="1", description="error message")
+     * @SwaggerResponse(responseClass="%MODEL%Request",scene="response",template="page")
+     */
+    public function index()
+    {
+        return $this->apiResponse(function () {
+            return $this->model->search($this->request->all());
+        });
+    }
+
+    /**
+     * 新建%TITLE%
+     * @PostApi(summary="新建%TITLE%",path="create")
+     * @ValidationRequest(template="authorization")
+     * @BodyValidation(validate="%MODEL%Request",scene="create")
+     * @ApiResponse(code="1", description="error message")
+     * @ApiResponse(code="0", description="新增成功", schema={},template="success")
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \Throwable
+     */
+    public function create(%MODEL%Request $request)
+    {
+        return $this->apiResponse(function () use ($request) {
+            $id   = $this->request->input('id');
+            $data = $request->validated();
+            $this->model->import($data, $id);
+        });
+    }
+
+    /**
+     * 查看%TITLE%
+     * @GetApi(summary="查看%TITLE%",path="view")
+     * @ValidationRequest(template="id")
+     * @ValidationRequest(template="authorization")
+     * @ApiResponse(code="1", description="error message")
+     * @SwaggerResponse(responseClass="%MODEL%Request",scene="response")
+     */
+    public function view()
+    {
+        return $this->apiResponse(function () {
+            $id = $this->request->input('id');
+
+            return %MODEL%::getInfoById($id)->toArray();
+        });
+    }
+
+    /**
+     * 删除%TITLE%
+     * @GetApi(summary="删除%TITLE%",path="delete")
+     * @ValidationRequest(template="id")
+     * @ValidationRequest(template="authorization")
+     * @ApiResponse(code="1", description="error message")
+     * @ApiResponse(code="0", description="删除成功", schema={},template="success")
+     */
+    public function delete()
+    {
+        return $this->apiResponse(function () {
+            $id = $this->request->input('id');
+
+            return %MODEL%::deleteById($id);
+        });
+    }
+}
