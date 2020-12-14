@@ -16,7 +16,7 @@ class %CLASS% extends FormRequest
      */
     public static $scene = [
         'response' => [%RESPONSE%],
-        'create'=>[%RULES%]
+        'create'=>[%RULES%],
         'search'=>[]
     ];
     public static $field = [%ATTRIBUTES%];
@@ -37,6 +37,22 @@ class %CLASS% extends FormRequest
      */
     public function rules(): array
     {
-        return self::$scene['create'];
+        return [];
+    }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @param null $id
+     *
+     * @return array
+     */
+    public static function commonRules($id = null): array
+    {
+        return [
+            'email'     => [
+                'required',
+                Rule::unique(self::$table)->ignore($id),
+            ],
+        ];
     }
 }

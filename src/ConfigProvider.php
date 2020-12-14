@@ -35,6 +35,12 @@ class ConfigProvider
                     'source'      => __DIR__ . '/../publish/SwaggerTemplate.php',
                     'destination' => BASE_PATH . '/app/Constants/SwaggerTemplate.php',
                 ],
+                [
+                    'id'          => 'config',
+                    'description' => 'The config for devtool.',
+                    'source'      => __DIR__ . '/../publish/app_tool.php',
+                    'destination' => BASE_PATH . '/app/config/autoload/app_tool.php',
+                ],
             ],
         ];
     }

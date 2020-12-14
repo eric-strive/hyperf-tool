@@ -2,8 +2,8 @@
 
 namespace Hyperf\EricTool\Exception;
 
-use Hyperf\Server\Exception\ServerException;
+use RuntimeException;
 
-class ToolException extends ServerException
+class ToolException extends RuntimeException
 {
 }
