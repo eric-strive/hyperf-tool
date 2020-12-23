@@ -64,9 +64,6 @@ class RequestCommand extends GeneratorCommand
         $columns = $this->getTableColumns($table);
         $str     = "\n";
         foreach ($columns as $col) {
-            if (in_array($col['name'], ['id', '_id', 'created_at', 'updated_at'])) {
-                continue;
-            }
             $default = $col['comment'] ? : $col['name'];
             $default = explode(' ', $default)[0];
             $default = sprintf('"%s"', $default);
@@ -81,9 +78,6 @@ class RequestCommand extends GeneratorCommand
         $columns = $this->getTableColumns($table);
         $str     = "\n";
         foreach ($columns as $col) {
-            if (in_array($col['name'], ['id', '_id'])) {
-                continue;
-            }
             $default = $col['type'];
             $default = sprintf('"%s"', $default);
             $str     .= "        '" . $col['name'] . "' => " . $default . ",\n";
@@ -97,7 +91,7 @@ class RequestCommand extends GeneratorCommand
         $columns = $this->getTableColumns($table);
         $str     = "\n";
         foreach ($columns as $col) {
-            if (in_array($col['name'], ['id', '_id', 'created_at', 'updated_at'])) {
+            if (in_array($col['name'], ['id', '_id', 'created_at', 'updated_at', 'created_user', 'updated_user'])) {
                 continue;
             }
             $default  = $col['type'];

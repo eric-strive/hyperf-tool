@@ -1,4 +1,4 @@
-# hyperf-tool
+# [hyperf-tool](https://github.com/eric-strive/hyperf-tool)
 
 ## 功能
 * 该组件主要是根据开发扩展一些hyperf的工具，主要有gii工具、swagger的扩展等... 持续跟进中。。。
@@ -8,7 +8,7 @@ composer require eric-strive/hyperf-tool
 ```
 ### 同步配置
 ```bash
-php bin/hyperf.php vendor:publish eric-strive/amqp-retry
+php bin/hyperf.php vendor:publish eric-strive/hyperf-tool
 ```
 * swagger模板配置在`App\Constants\SwaggerTemplate`，可以将重复出现的swagger配置在`SwaggerTemplate`中，
 可以极大的简化controller swagger代码量
@@ -91,6 +91,34 @@ eg:
 label：csv头信息
 value：取的对象或数组的值，可以是函数
 width：该列的宽度，根据实际调整
+
+Download::downloadCsv('test.csv', [[
+    'real_name'=>'王五',
+    'created_time'=>'2020-01-02 10:02:12',
+    'type'=>'测试',
+],[
+    'real_name'=>'张三',
+    'created_at1'=>'2020-01-23',
+    'type'=>'类型',
+]], [
+    [
+        'label' => "真实姓名",
+        'value' => 'real_name',
+        'width' => 15,
+    ],
+    [
+        'label' => "创建时间",
+        'value' => 'created_time',
+        'width' => 20,
+    ],
+    [
+        'label' => "类型",
+        'value' => static function ($model) {
+            return $model['type'] . '测试类型';
+        },
+        'width' => 5,
+    ],
+]);
 ```
 #### 有任何问题请联系 `eric-strive@qq.com`
 

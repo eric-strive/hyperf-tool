@@ -48,7 +48,7 @@ class Import
             $saveData = [];
             foreach ($mapField as $key => $val) {
                 if (is_array($val)) {
-                    $saveData[$key] = self::{$val['type']}($row[$val['value']]);
+                    $saveData[$key] = $val['function']($row[$val['line']]);
                 } else {
                     $saveData[$key] = $row[$val] ?? '未知';
                 }

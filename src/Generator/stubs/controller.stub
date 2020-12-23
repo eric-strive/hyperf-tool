@@ -9,6 +9,7 @@ use Hyperf\Apidog\Annotation\ApiController;
 use Hyperf\Apidog\Annotation\PostApi;
 use Hyperf\Apidog\Annotation\ApiResponse;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Apidog\Annotation\Query;
 use Hyperf\Apidog\Annotation\GetApi;
 use Hyperf\EricTool\Annotation\ValidationRequest;
 use Hyperf\EricTool\Annotation\BodyValidation;
