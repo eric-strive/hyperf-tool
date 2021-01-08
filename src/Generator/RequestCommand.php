@@ -52,6 +52,7 @@ class RequestCommand extends GeneratorCommand
                 'type'    => $col->getType()->getName() ?? '', // Use Doctrine convert type
                 'default' => $col->getDefault() ?? '',
                 'comment' => $col->getComment() ?? '',
+                'length'  => $col->getLength() ?? '',
                 'notnull' => $col->getNotnull() ?? 'false',
             ];
         }
@@ -97,6 +98,12 @@ class RequestCommand extends GeneratorCommand
             $default  = $col['type'];
             $notnull  = $col['notnull'];
             $required = $notnull ? 'required|' : '';
+            if($col['length']>0){
+                if($col['type']=="string"){
+                    $max = sprintf('max:%s|',$col['length']);
+                    $required  = sprintf('%s%s', $required,$max);
+                }
+            }
             $default  = sprintf('"%s%s"', $required, $default);
             $str      .= "        '" . $col['name'] . "' => " . $default . ",\n";
         }
