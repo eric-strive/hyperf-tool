@@ -98,14 +98,14 @@ class RequestCommand extends GeneratorCommand
             $default  = $col['type'];
             $notnull  = $col['notnull'];
             $required = $notnull ? 'required|' : '';
-            if($col['length']>0){
-                if($col['type']=="string"){
-                    $max = sprintf('max:%s|',$col['length']);
-                    $required  = sprintf('%s%s', $required,$max);
+            if ($col['length'] > 0) {
+                if ($col['type'] == "string") {
+                    $max      = sprintf('max:%s|', $col['length']);
+                    $required = sprintf('%s%s', $required, $max);
                 }
             }
-            $default  = sprintf('"%s%s"', $required, $default);
-            $str      .= "        '" . $col['name'] . "' => " . $default . ",\n";
+            $default = sprintf('"%s%s"', $required, $default);
+            $str     .= "        '" . $col['name'] . "' => " . $default . ",\n";
         }
 
         return $str;
