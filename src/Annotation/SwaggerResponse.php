@@ -31,13 +31,14 @@ class SwaggerResponse extends ApiResponse
      */
     public $scene = '';
 
-    public $code        = 0;
-    public $description = '请求成功';
+    public $code                 = 0;
+    public $is_field_description = true;
+    public $description          = '请求成功';
 
     public function __construct($value = null)
     {
         parent::__construct($value);
-        $this->schema = $this->getValidation($this->responseClass, $this->scene);
+        $this->schema = $this->getValidation($this->responseClass, $this->scene, null, $this->is_field_description);
     }
 
     public function collectMethod(string $className, ?string $target): void

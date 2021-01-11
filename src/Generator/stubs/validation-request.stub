@@ -1,12 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
 namespace %NAMESPACE%;
 
-use Hyperf\Validation\Request\FormRequest;
-
-class %CLASS% extends FormRequest
+%USE%
+class %CLASS% extends %EXTENDS%
 {
     public static $table = '%TABLE%';
     /**
@@ -20,6 +18,11 @@ class %CLASS% extends FormRequest
         'search'=>[]
     ];
     public static $field = [%ATTRIBUTES%];
+
+    /**
+    * 字段描述
+    */
+    public static $field_description = [%FIELD_DESCRIPTION%];
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -39,4 +42,5 @@ class %CLASS% extends FormRequest
     {
         return [];
     }
+    %COLUMNS%
 }

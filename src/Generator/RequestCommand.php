@@ -74,14 +74,55 @@ class RequestCommand extends GeneratorCommand
         return $str;
     }
 
+    protected function getFieldDescription($table): string
+    {
+        $columns = $this->getTableColumns($table);
+        $str     = "\n";
+        foreach ($columns as $col) {
+            $default = $col['comment'] ? : $col['name'];
+            $default = sprintf('"%s"', $default);
+            $str     .= "        '" . $col['name'] . "' => " . $default . ",\n";
+        }
+
+        return $str;
+    }
+
     protected function getResponse($table): string
     {
         $columns = $this->getTableColumns($table);
         $str     = "\n";
         foreach ($columns as $col) {
             $default = $col['type'];
+            switch ($col['type']) {
+                case 'decimal':
+                    $default = 'numeric';
+                    break;
+                case 'boolean':
+                    $default = 'integer';
+                    break;
+                case 'datetime':
+                    $default = '';
+                    break;
+            }
             $default = sprintf('"%s"', $default);
             $str     .= "        '" . $col['name'] . "' => " . $default . ",\n";
+        }
+
+        return $str;
+    }
+
+    protected function getColumns($table): string
+    {
+        $columns = $this->getTableColumns($table);
+        $str     = "\n";
+        foreach ($columns as $col) {
+            $default = $col['type'];
+            $label   = sprintf('$attributeLabel["%s"]', $col['name']);
+            $default = sprintf("[
+                'label' => %s,
+                'value' => '%s',
+            ],", $label, $col['name']);
+            $str     .= $default . "\n";
         }
 
         return $str;
@@ -95,14 +136,26 @@ class RequestCommand extends GeneratorCommand
             if (in_array($col['name'], ['id', '_id', 'created_at', 'updated_at', 'created_user', 'updated_user'])) {
                 continue;
             }
-            $default  = $col['type'];
             $notnull  = $col['notnull'];
-            $required = $notnull ? 'required|' : '';
+            $required = $notnull ? 'required' : '';
             if ($col['length'] > 0) {
                 if ($col['type'] == "string") {
-                    $max      = sprintf('max:%s|', $col['length']);
+                    $max      = sprintf('|max:%s', $col['length']);
                     $required = sprintf('%s%s', $required, $max);
                 }
+            }
+            //默认值
+            $default = sprintf('|%s', $col['type']);
+            switch ($col['type']) {
+                case 'decimal':
+                    $default = '|numeric';
+                    break;
+                case 'boolean':
+                    $default = '|integer';
+                    break;
+                case 'datetime':
+                    $default = '';
+                    break;
             }
             $default = sprintf('"%s%s"', $required, $default);
             $str     .= "        '" . $col['name'] . "' => " . $default . ",\n";
@@ -123,10 +176,34 @@ class RequestCommand extends GeneratorCommand
      */
     protected function getInput()
     {
-        $arr               = parent::getInput();
-        $arr['attributes'] = $this->getAttributes($arr["table"]);
-        $arr['rules']      = $this->getRules($arr["table"]);
-        $arr['response']   = $this->getResponse($arr["table"]);
+        $arr                      = parent::getInput();
+        $arr['attributes']        = $this->getAttributes($arr["table"]);
+        $arr['field_description'] = $this->getFieldDescription($arr["table"]);
+        $arr['rules']             = $this->getRules($arr["table"]);
+        $arr['response']          = $this->getResponse($arr["table"]);
+        $arr['columns']           = '';
+        if ($arr["title"]) {
+            $columns        = $this->getColumns($arr["table"]);
+            $arr['columns'] = sprintf('
+    /**
+     * 导出模板
+     */
+    public function getColumns(): array
+    {
+        $attributeLabel = self::$field;
+        return [%s];
+    }
+', $columns);
+            //是否需要换继承
+            $extends = config('devtool.commands.make:request.extends', '');
+            if ($extends) {
+                $arr['use']     = '';
+                $arr['extends'] = $extends;
+            } else {
+                $arr['use']     = 'use Hyperf\Validation\Request\FormRequest;';
+                $arr['extends'] = 'FormRequest';
+            }
+        }
 
         return $arr;
     }

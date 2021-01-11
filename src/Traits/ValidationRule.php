@@ -12,11 +12,15 @@ use Hyperf\EricTool\Exception\ToolException;
  */
 trait ValidationRule
 {
-    public function getValidation($validate, $scene, $template = null): array
+    public function getValidation($validate, $scene, $template = null, $field = false): array
     {
-        $validate   = strrpos($validate, '\\') ? $validate : sprintf('\App\Request\%s', $validate);
-        $rules      = $validate::$scene[$scene] ?? [];
-        $attributes = $validate::$field;
+        $validate = strrpos($validate, '\\') ? $validate : sprintf('\App\Request\%s', $validate);
+        $rules    = $validate::$scene[$scene] ?? [];
+        if (isset($validate::$field_description)) {
+            $attributes = $field ? $validate::$field_description : $validate::$field;
+        } else {
+            $attributes = $validate::$field;
+        }
         $validation = [];
         foreach ($rules as $key => $val) {
             $title                  = $attributes[$key] ?? null;
