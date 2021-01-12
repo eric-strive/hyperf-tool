@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Hyperf\EricTool\Utils\Excel;
 
+use Hyperf\EricTool\Exception\ToolException;
+use Hyperf\EricTool\Utils\Excel\Constants\ErrorCode;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Vtiful\Kernel\Excel;
 use Vtiful\Kernel\Format;
+use Hyperf\HttpServer\Contract\ResponseInterface;
+use Hyperf\Utils\ApplicationContext;
 
 /**
  * User: wangwei
@@ -24,14 +28,18 @@ class Download
      * @param array|\Hyperf\Database\Model\Builder|mixed $query
      * @param                                            $formatData
      *
+     * @param null                                       $temPath 临时地址
+     *
      * @return mixed
      */
-    public static function downloadCsv($fileName, $query, $formatData)
+    public static function downloadCsv($fileName, $query, $formatData, $temPath = null)
     {
+
         $config      = [
-            'path' => config('app_tool.path')??'/tmp',
+            'path' => self::getPath($temPath),
         ];
         $excelObject = new Excel($config);
+        $fileName    = sprintf('%s.csv', $fileName);
         $fileObject  = $excelObject->constMemory($fileName);
         // Init File
         $heardData = [];
@@ -92,7 +100,8 @@ class Download
     public static function excelResponse($fileName, $filePath)
     {
         //后期建议异步删除文件
-        $response = response()
+        $response = ApplicationContext::getContainer()
+            ->get(ResponseInterface::class)
             ->withHeader('content-description', 'File Transfer')
             ->withHeader('content-type', 'text/csv')
             ->withHeader('Content-Disposition', "attachment; filename={$fileName}")
@@ -105,5 +114,27 @@ class Download
         @unlink($filePath);
 
         return $response;
+    }
+
+    private static function getPath($temPath): string
+    {
+        $temPath = $temPath ?? '/tmp';
+        //文件夹不存在或者不是目录。创建文件夹
+        if (self::checkPath($temPath)) {
+            return $temPath;
+        }
+        throw new ToolException(ErrorCode::FILE_PATH_ERROR,ErrorCode::getMessage(ErrorCode::FILE_PATH_ERROR));
+    }
+
+    private static function checkPath($temPath)
+    {
+        if (!file_exists($temPath) || !is_dir($temPath)) {
+            return mkdir($temPath, 0777, true);
+        }
+        if (!is_writable($temPath)) {
+            return chmod($temPath, 0777);
+        }
+
+        return true;
     }
 }

@@ -30,6 +30,7 @@ class BodyValidation extends Body
      * @var string
      */
     public $scene = '';
+    public $is_field_description = true;
 
     public $template = "";
 
@@ -39,7 +40,7 @@ class BodyValidation extends Body
         if (is_array($value)) {
             foreach ($value as $key => $val) {
                 if ($key == 'validate') {
-                    $this->rules = $this->getValidation($this->validate, $this->scene, $this->template);
+                    $this->rules = $this->getValidation($this->validate, $this->scene, $this->template,$this->is_field_description);
                 }
             }
         }
