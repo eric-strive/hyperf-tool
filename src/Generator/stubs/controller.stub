@@ -19,7 +19,7 @@ use Hyperf\EricTool\Annotation\BodyValidation;
 use Hyperf\EricTool\Annotation\SwaggerResponse;
 
 /**
- * @ApiController(tag='%TITLE%管理',prefix='/%PREFIX%')
+ * @ApiController(tag="%TITLE%管理",prefix="/%PREFIX%")
  */
 class %CLASS% extends BaseController
 {
@@ -32,11 +32,11 @@ class %CLASS% extends BaseController
 
     /**
      * %TITLE%列表
-     * @PostApi(summary='%TITLE%列表',path='index')
-     * @ValidationRequest(template='authorization')
-     * @BodyValidation(validate='%MODEL%Request',scene='search',template='page_search')
-     * @ApiResponse(code='1', description='error message')
-     * @SwaggerResponse(responseClass='%MODEL%Request',scene='response',template=='page')
+     * @PostApi(summary="%TITLE%列表",path="index")
+     * @ValidationRequest(template="authorization")
+     * @BodyValidation(validate="%MODEL%Request",scene="search",template="page_search")
+     * @ApiResponse(code="1", description="error message")
+     * @SwaggerResponse(responseClass="%MODEL%Request",scene="response",template="page")
      */
     public function index()
     {
@@ -47,24 +47,24 @@ class %CLASS% extends BaseController
 
     /**
      * %TITLE%列表导出
-     * @GetApi(summary='%TITLE%列表导出',path='export')
-     * @ValidationRequest(template='authorization')
+     * @GetApi(summary="%TITLE%列表导出",path="export")
+     * @ValidationRequest(template="authorization")
      */
     public function export()
     {
-        $fileName = Dh::todayDate(false) . '%TITLE%';
+        $fileName = Dh::todayDate(false) . "%TITLE%";
 
         return Download::downloadCsv($fileName, make(Receivable::class)->search($this->request->all(), true),
             ReceivableRequest::getColumns());
     }
     /**
      * 新建\更新%TITLE%
-     * @PostApi(summary='新建\更新%TITLE%',path='create')
-     * @ValidationRequest(template='authorization')
-     * @Query(key='id|%TITLE%ID', rule='integer')
-     * @BodyValidation(validate='%MODEL%Request',scene='create')
-     * @ApiResponse(code='1', description='error message')
-     * @ApiResponse(code='0', description='操作成功', schema={},template='success')
+     * @PostApi(summary="新建\更新%TITLE%",path="create")
+     * @ValidationRequest(template="authorization")
+     * @Query(key="id|%TITLE%ID", rule="integer")
+     * @BodyValidation(validate="%MODEL%Request",scene="create")
+     * @ApiResponse(code="1", description="error message")
+     * @ApiResponse(code="0", description="操作成功", schema={},template="success")
      *
      * @return \Psr\Http\Message\ResponseInterface
      * @throws \Throwable
@@ -72,23 +72,23 @@ class %CLASS% extends BaseController
     public function create()
     {
         return $this->apiResponse(function () {
-            $id = $this->request->input('id', '');
+            $id = $this->request->input("id", "");
             $this->model->import($this->request->all(), $id);
         });
     }
 
     /**
      * 查看%TITLE%
-     * @GetApi(summary='查看%TITLE%',path='view')
-     * @ValidationRequest(template='id')
-     * @ValidationRequest(template='authorization')
-     * @ApiResponse(code='1', description='error message')
-     * @SwaggerResponse(responseClass='%MODEL%Request',scene='response')
+     * @GetApi(summary="查看%TITLE%",path="view")
+     * @ValidationRequest(template="id")
+     * @ValidationRequest(template="authorization")
+     * @ApiResponse(code="1", description="error message")
+     * @SwaggerResponse(responseClass="%MODEL%Request",scene="response")
      */
     public function view()
     {
         return $this->apiResponse(function () {
-            $id = $this->request->input('id');
+            $id = $this->request->input("id");
 
             return %MODEL%::getInfoById($id)->toArray();
         });
@@ -96,16 +96,16 @@ class %CLASS% extends BaseController
 
     /**
      * 删除%TITLE%
-     * @GetApi(summary='删除%TITLE%',path='delete')
-     * @ValidationRequest(template='id')
-     * @ValidationRequest(template='authorization')
-     * @ApiResponse(code='1', description='error message')
-     * @ApiResponse(code='0', description='删除成功', schema={},template='success')
+     * @GetApi(summary="删除%TITLE%",path="delete")
+     * @ValidationRequest(template="id")
+     * @ValidationRequest(template="authorization")
+     * @ApiResponse(code="1", description="error message")
+     * @ApiResponse(code="0", description="删除成功", schema={},template="success")
      */
     public function delete()
     {
         return $this->apiResponse(function () {
-            $id = $this->request->input('id');
+            $id = $this->request->input("id");
 
             return %MODEL%::deleteById($id);
         });

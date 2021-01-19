@@ -40,7 +40,7 @@ class ControllerCommand extends GeneratorCommand
     {
         $arr           = parent::getInput();
         $name = $arr["name"];
-        if(strpos('Controller',$name)){
+        if(strpos($name,'Controller')){
             $name = str_replace('Controller','',$name);
         }
         $arr['prefix'] = $this->toUnderScore($name);
