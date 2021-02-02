@@ -48,13 +48,14 @@ class %CLASS% extends BaseController
     /**
      * %TITLE%列表导出
      * @GetApi(summary="%TITLE%列表导出",path="export")
+     * @BodyValidation(validate="%MODEL%Request",scene="search")
      * @ValidationRequest(template="authorization")
      */
     public function export()
     {
-        $fileName = Dh::todayDate(false) . "%TITLE%";
+        $fileName = Dh::todayDate(false) . "%TITLE%列表";
 
-        return Download::downloadCsv($fileName, make(Receivable::class)->search($this->request->all(), true),
+        return Download::downloadCsv($fileName, make(%MODEL%::class)->search($this->request->all(), true),
             ReceivableRequest::getColumns());
     }
     /**

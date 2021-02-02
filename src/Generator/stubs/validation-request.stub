@@ -20,10 +20,6 @@ class %CLASS% extends %EXTENDS%
     public static $field = [%ATTRIBUTES%];
 
     /**
-    * 字段描述
-    */
-    public static $field_description = [%FIELD_DESCRIPTION%];
-    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
