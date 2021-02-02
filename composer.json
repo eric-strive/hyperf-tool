@@ -17,10 +17,10 @@
   },
   "require": {
     "php": ">=7.2",
-    "hyperf/command": "^2.0.0",
-    "hyperf/contract": "^2.0.0",
-    "hyperf/di": "^2.0.0",
-    "hyperf/utils": "^2.0.0",
+    "hyperf/command": "~2.0.0",
+    "hyperf/contract": "~2.0.0",
+    "hyperf/di": "~2.0.0",
+    "hyperf/utils": "~2.0.0",
     "viest/php-ext-xlswriter-ide-helper": "dev-master",
     "daodao97/apidog": "^1.5"
   },
