@@ -21,18 +21,28 @@ trait ValidationRule
         } else {
             $attributes = $validate::$field;
         }
-        $validation = [];
-        foreach ($rules as $key => $val) {
-            $title                  = $attributes[$key] ?? null;
-            $validaKey              = $title ? sprintf('%s|%s', $key, $title) : sprintf('%s|%s', $key, $key);
-            $validation[$validaKey] = $val;
-        }
+        $validation = $this->validationData($rules, $attributes);
         $templateData = $this->getTemplate($template);
         $validation   = $validation ? array_merge($templateData, $validation) : $templateData;
 
         return $validation;
     }
 
+    public function validationData($rules, $attributes)
+    {
+        $validation = [];
+        foreach ($rules as $key => $val) {
+            $title     = $attributes[$key] ?? null;
+            $validaKey = $title ? sprintf('%s|%s', $key, $title) : sprintf('%s|%s', $key, $key);
+            if (is_array($val)) {
+                $validation[$validaKey] = $this->validationData($val, $attributes);
+            } else {
+                $validation[$validaKey] = $val;
+            }
+        }
+
+        return $validation;
+    }
     public function getTemplate($template): array
     {
         $templates    = SwaggerTemplate::VALIDATION_RULE;
