@@ -60,12 +60,14 @@ class Download
         $callback = static function ($datas) use ($formatData, $fileObject) {
             $excelData = [];
             foreach ($datas as $queryItem) {
-                $row = [];
+                $row  = [];
+                $data = $queryItem->toArray();
                 foreach ($formatData as $item) {
                     $formatFunction = $item['value'];
                     if (is_string($formatFunction)) {
-                        $value = in_array($formatFunction, self::ARRAY_CONVERT,
-                            true) ? $queryItem->toArray()[$formatFunction] : $queryItem[$formatFunction];
+                        $value = $data[$formatFunction];
+                        //                        $value = in_array($formatFunction, self::ARRAY_CONVERT,
+                        //                            true) ? $queryItem->toArray()[$formatFunction] : $queryItem[$formatFunction];
                     } else {
                         $value = $formatFunction($queryItem);
                     }
@@ -123,7 +125,7 @@ class Download
         if (self::checkPath($temPath)) {
             return $temPath;
         }
-        throw new ToolException(ErrorCode::FILE_PATH_ERROR,ErrorCode::getMessage(ErrorCode::FILE_PATH_ERROR));
+        throw new ToolException(ErrorCode::FILE_PATH_ERROR, ErrorCode::getMessage(ErrorCode::FILE_PATH_ERROR));
     }
 
     private static function checkPath($temPath)
