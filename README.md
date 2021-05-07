@@ -29,6 +29,7 @@ php bin/hyperf.php vendor:publish eric-strive/hyperf-tool
 @SwaggerResponse(responseClass="DictDetailRequest",scene="response",template="page")
 ```
 ### 代码生成
+* 现将model代码复制放入app\Model
 * controller自动生成
 ```bash
 php bin/hyperf.php make:controller TestUserController TestModel 测试我的功能

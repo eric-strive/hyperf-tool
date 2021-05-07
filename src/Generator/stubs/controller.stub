@@ -56,7 +56,7 @@ class %CLASS% extends BaseController
         $fileName = Dh::todayDate(false) . "%TITLE%列表";
 
         return Download::downloadCsv($fileName, make(%MODEL%::class)->search($this->request->all(), true),
-            ReceivableRequest::getColumns());
+            %MODEL%Request::getColumns());
     }
     /**
      * 新建\更新%TITLE%
