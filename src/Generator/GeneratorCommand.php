@@ -240,13 +240,21 @@ abstract class GeneratorCommand extends Command
         $table = trim($this->input->getArgument('table') ?? '');
         $model = trim($this->input->getArgument('model') ?? '');
         if (empty($model) && $table) {
-            $model = ucwords(convertUnderline($table));
+            $model = ucwords($this->convertUnderline($table));
         }
         $title = trim($this->input->getArgument('title') ?? '');
 
         return ['name' => $name, 'model' => $model, 'table' => $table, 'title' => $title];
     }
 
+    private function convertUnderline($str)
+    {
+        $str = preg_replace_callback('/([-_]+([a-z]{1}))/i', function ($matches) {
+            return strtoupper($matches[2]);
+        }, $str);
+
+        return $str;
+    }
     /**
      * Get the desired class name from the input.
      *

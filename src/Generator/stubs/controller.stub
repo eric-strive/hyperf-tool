@@ -31,7 +31,6 @@ class %CLASS% extends BaseController
     public $model;
 
     /**
-     * %TITLE%列表
      * @PostApi(summary="%TITLE%列表",path="index")
      * @ValidationRequest(template="authorization")
      * @BodyValidation(validate="%MODEL%Request",scene="search",template="page_search")
@@ -46,7 +45,6 @@ class %CLASS% extends BaseController
     }
 
     /**
-     * %TITLE%列表导出
      * @GetApi(summary="%TITLE%列表导出",path="export")
      * @BodyValidation(validate="%MODEL%Request",scene="search")
      * @ValidationRequest(template="authorization")
@@ -59,7 +57,6 @@ class %CLASS% extends BaseController
             %MODEL%Request::getColumns());
     }
     /**
-     * 新建\更新%TITLE%
      * @PostApi(summary="新建\更新%TITLE%",path="create")
      * @ValidationRequest(template="authorization")
      * @Query(key="id|%TITLE%ID", rule="integer")
@@ -79,7 +76,6 @@ class %CLASS% extends BaseController
     }
 
     /**
-     * 查看%TITLE%
      * @GetApi(summary="查看%TITLE%",path="view")
      * @ValidationRequest(template="id")
      * @ValidationRequest(template="authorization")
@@ -96,7 +92,6 @@ class %CLASS% extends BaseController
     }
 
     /**
-     * 删除%TITLE%
      * @GetApi(summary="删除%TITLE%",path="delete")
      * @ValidationRequest(template="id")
      * @ValidationRequest(template="authorization")
